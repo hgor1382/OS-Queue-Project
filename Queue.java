@@ -85,5 +85,13 @@ Class MassageQueue{
         return message;
     }
 
+    public boolean tryAcquire(Semaphore semaphore) throws InterruptedException {
+        if (semaphore.availablePermits() > 0) {
+            semaphore.acquire();
+            return true;
+        }
+        return false;
+    }
+
 
 }
