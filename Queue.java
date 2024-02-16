@@ -114,6 +114,14 @@ Class MassageQueue{
         return null;
     }
 
+    private int getTotalLength(String topic) {
+        int totalLength = 0;
+        for (String message : queues.get(topic)) {
+            totalLength += message.length();
+        }
+        return totalLength;
+    }
+
 
 }
 
