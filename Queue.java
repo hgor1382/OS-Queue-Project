@@ -116,3 +116,14 @@ Class MassageQueue{
 
 
 }
+
+class Stats {
+    int numMessages;
+    int totalLength;
+    long memoryUsage;
+    int numTopics;
+
+    LinkedList<String> queue;
+    int volume;
+    long time;
+}
