@@ -58,4 +58,20 @@ Class MassageQueue{
         }
     }
 
+    public void msg_send(String topic, String message, long time) throws InterruptedException {
+        semProducers.get(topic).acquire();
+        mutex.acquire();
+        if (totalVolume.get(topic) + message.length() > maxVolume) {
+            semProducers.get(topic).release();
+            return;
+        }
+        queues.get(topic).add(message);
+        System.out.println("after produce: "+queues.get(topic) + " at time: "+ (System.currentTimeMillis() - time));
+        numMessages.get(topic).incrementAndGet();
+        totalVolume.put(topic, totalVolume.get(topic) + message.length());
+        semConsumers.get(topic).release();
+        mutex.release();
+    }
+
+
 }
