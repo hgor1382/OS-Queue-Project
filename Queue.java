@@ -171,6 +171,32 @@ Class MassageQueue implements Serializable{
     }
 
 
+    public MessageQueue readQueues(String name) {
+        MessageQueue savedQueue = null;
+    
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(name))) {
+            int savedCap = (int) in.readInt();
+            int savedMax = (int) in.readInt();
+            Map<String, Semaphore> savedSemp = (Map<String, Semaphore>) in.readObject();
+            Map<String, Semaphore> savedSemc = (Map<String, Semaphore>) in.readObject();
+            Map<String, LinkedList<String>> savedQueues = (Map<String, LinkedList<String>>) in.readObject();
+            Map<String, AtomicInteger> savedNum = (Map<String, AtomicInteger>) in.readObject();
+            Map<String, Integer> savedTotalVolume = (Map<String, Integer>) in.readObject();
+            
+            savedQueue = new MessageQueue(savedCap, savedMax);
+            savedQueue.semProducers.putAll(savedSemp);
+            savedQueue.semConsumers.putAll(savedSemc);
+            savedQueue.queues.putAll(savedQueues);
+            savedQueue.numMessages.putAll(savedNum);
+            savedQueue.totalVolume.putAll(savedTotalVolume);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+        return savedQueue;
+    }
+
+
 }
 
 class Stats {
