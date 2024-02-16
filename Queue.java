@@ -4,7 +4,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 
-Class MassageQueue{
+Class MassageQueue implements Serializable{
     private final Map<String, LinkedList<String>> queues;
     private final int capacity;
     private final Map<String, Semaphore> semProducers;
@@ -154,6 +154,20 @@ Class MassageQueue{
 
     public int getNumTopics() {
         return queues.keySet().size();
+    }
+
+    public void saveQueues(String name) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(name))) {
+            out.writeInt(capacity);
+            out.writeInt(maxVolume);
+            out.writeObject(semProducers);
+            out.writeObject(semConsumers);
+            out.writeObject(queues);
+            out.writeObject(numMessages);
+            out.writeObject(totalVolume);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
