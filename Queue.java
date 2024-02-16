@@ -23,4 +23,16 @@ Class MassageQueue{
         this.mutex = new Semaphore(1);
         this.r_mutex = new Semaphore(1);
     }
+
+    public MessageQueue(int maxVolume) {
+        this.capacity = Integer.MAX_VALUE;
+        this.maxVolume = maxVolume;
+        this.queues = new HashMap<>();
+        this.semProducers = new HashMap<>();
+        this.semConsumers = new HashMap<>();
+        this.numMessages = new HashMap<>();
+        this.totalVolume = new HashMap<>();
+        this.mutex = new Semaphore(1);
+        this.r_mutex = new Semaphore(1);
+    }
 }
