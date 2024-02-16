@@ -93,5 +93,26 @@ Class MassageQueue{
         return false;
     }
 
+    public String nb_msg_get(String topic, long time) {
+        try {
+            if (tryAcquire(semConsumers.get(topic))) {
+                r_mutex.acquire();
+                String message = queues.get(topic).poll();
+                r_mutex.release();
+                if (message != null) {
+                    numMessages.get(topic).decrementAndGet();
+                    semProducers.get(topic).release();
+                    System.out.println("after cosume nb: "+queues.get(topic)+ " at time: " + (System.currentTimeMillis() - time));
+                    return message;
+                } else {
+                    semConsumers.get(topic).release();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }
