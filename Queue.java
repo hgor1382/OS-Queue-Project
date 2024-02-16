@@ -74,4 +74,16 @@ Class MassageQueue{
     }
 
 
+    public String msg_get(String topic, long time) throws InterruptedException {
+        semConsumers.get(topic).acquire();
+        r_mutex.acquire();
+        String message = queues.get(topic).poll();
+        System.out.println("after cosume: " + queues.get(topic) + " at time: " + (System.currentTimeMillis() - time));
+        numMessages.get(topic).decrementAndGet();
+        semProducers.get(topic).release();
+        r_mutex.release();
+        return message;
+    }
+
+
 }
