@@ -1,5 +1,8 @@
 import java.util.*;
 import java.io.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 Class MassageQueue{
     private final Map<String, LinkedList<String>> queues;
@@ -120,6 +123,17 @@ Class MassageQueue{
             totalLength += message.length();
         }
         return totalLength;
+    }
+
+    private long getMemoryUsage() {
+        MemoryMXBean mem = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heap = mem.getHeapMemoryUsage();
+        MemoryUsage nheap = mem.getNonHeapMemoryUsage();
+        
+        long heapUsed = heap.getUsed();
+        long nonHeapUsed = nheap.getUsed();
+        long total = heapUsed + nonHeapUsed;
+        return total;
     }
 
 
