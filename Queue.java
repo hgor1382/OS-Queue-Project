@@ -48,5 +48,14 @@ Class MassageQueue{
         this.r_mutex = new Semaphore(1);
     }
 
+    public void createTopic(String topic) {
+        if (!queues.containsKey(topic)) {
+            queues.put(topic, new LinkedList<>());
+            semProducers.put(topic, new Semaphore(capacity));
+            semConsumers.put(topic, new Semaphore(0));
+            numMessages.put(topic, new AtomicInteger(0));
+            totalVolume.put(topic, 0);
+        }
+    }
 
 }
