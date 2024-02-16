@@ -136,6 +136,26 @@ Class MassageQueue{
         return total;
     }
 
+    public Stats stats(String topic, long time) throws InterruptedException {
+        Stats stats = new Stats();
+        mutex.acquire();
+        r_mutex.acquire();
+        stats.numMessages = numMessages.get(topic).get();
+        stats.totalLength = getTotalLength(topic);
+        stats.memoryUsage = getMemoryUsage();
+        stats.numTopics = getNumTopics();
+        stats.queue = queues.get(topic);
+        stats.volume = totalVolume.get(topic);
+        stats.time = System.currentTimeMillis() - time;
+        r_mutex.release();
+        mutex.release();
+        return stats;
+    }
+
+    public int getNumTopics() {
+        return queues.keySet().size();
+    }
+
 
 }
 
